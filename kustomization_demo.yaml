@@ -50,7 +50,7 @@ secretGenerator:
   - DISABLE_LOGGING_TEST=False
   - MOCK_CONNECTIONS=False
   - CELERY_BROKER_URL=amqp://guest:guest@backend-rabbitmq.default.svc.cluster.local:5672
-  - DB_NAME=intel_owl_db
+  - DB_NAME=threat_matrix_db
   - HTTPS_ENABLED=not_enabled
   - AWS_SECRETS=False
   - AWS_SQS=False
