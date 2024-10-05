@@ -1,0 +1,5 @@
+FROM khulnasoft/threatmatrix:latest
+COPY ThreatMatrix/configuration/analyzer_config.json /opt/deploy/configuration/analyzer_config.json
+VOLUME generic_logs:/var/log/threat_matrix
+VOLUME shared_files:/opt/deploy/files_required
+CMD /usr/local/bin/celery -A threat_matrix.celery worker --uid www-data --gid www-data --pidfile="/tmp/%n.pid" --time-limit=1000
