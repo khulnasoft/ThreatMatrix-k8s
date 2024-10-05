@@ -10,6 +10,8 @@ cp ThreatMatrix/docker/Dockerfile_nginx ./dockerfile-nginx
 echo "###############"
 echo "Modifying files for K8S Deployment"
 echo "###############"
+sed -i -e 's:frontend/:ThreatMatrix/frontend/:g' -e 's:COPY . :COPY ThreatMatrix/. :g' Dockerfile
+sed -i -e 's:docker/:ThreatMatrix/docker/:g' -e 's:COPY . :COPY ThreatMatrix/. :g' Dockerfile
 sed -i -e 's:requirements/:ThreatMatrix/requirements/:g' -e 's:COPY . :COPY ThreatMatrix/. :g' Dockerfile
 {
 echo "
