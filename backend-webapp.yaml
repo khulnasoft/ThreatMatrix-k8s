@@ -1,0 +1,740 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-backend
+  labels:
+    app: backend-webapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend-webapp
+  template:
+    metadata:
+      labels:
+        app: backend-webapp
+    spec:
+      volumes:
+        - name: shared-files
+          hostPath:
+            path: /tmp
+            type: Directory
+        - name: static
+          persistentVolumeClaim:
+            claimName: static-claim
+      containers:
+        - name: uwsgi
+          image: <docker-repo>/threatmatrix:latest
+          command: ["/opt/deploy/threat_matrix/docker/entrypoint_uwsgi.sh"]
+          ports:
+          - containerPort: 8001
+          volumeMounts:
+            - name: shared-files
+              mountPath: /opt/deploy/files_required
+            - name: static
+              mountPath: /opt/deploy/threat_matrix/static
+          env:
+          - name: DJANGO_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DJANGO_SECRET
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DB_HOST
+          - name: DB_PORT
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DB_PORT
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DB_USER
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DB_PASSWORD
+          - name: OLD_JOBS_RETENTION_DAYS
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: OLD_JOBS_RETENTION_DAYS
+          - name: PYTHREATMATRIX_TOKEN_LIFETIME
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: PYTHREATMATRIX_TOKEN_LIFETIME
+          - name: SHODAN_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: SHODAN_KEY
+          - name: ABUSEIPDB_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: ABUSEIPDB_KEY
+          - name: AUTH0_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: AUTH0_KEY
+          - name: SECURITYTRAILS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: SECURITYTRAILS_KEY
+          - name: GSF_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: GSF_KEY
+          - name: OTX_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: OTX_KEY
+          - name: CIRCL_CREDENTIALS
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: CIRCL_CREDENTIALS
+          - name: VT_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: VT_KEY
+          - name: HA_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: HA_KEY
+          - name: INTEZER_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: INTEZER_KEY
+          - name: FIRST_MISP_API
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: FIRST_MISP_API
+          - name: MISP_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: MISP_KEY
+          - name: MAXMIND_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: MAXMIND_KEY
+          - name: DNSDB_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DNSDB_KEY
+          - name: HONEYDB_API_ID
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: HONEYDB_API_ID
+          - name: HONEYDB_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: HONEYDB_API_KEY
+          - name: HUNTER_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: HUNTER_API_KEY
+          - name: CENSYS_API_ID
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: CENSYS_API_ID
+          - name: CENSYS_API_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: CENSYS_API_SECRET
+          - name: ONYPHE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: ONYPHE_KEY
+          - name: GREYNOISE_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: GREYNOISE_API_KEY
+          - name: TEST_JOB_ID
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: TEST_JOB_ID
+          - name: TEST_IP
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: TEST_IP
+          - name: TEST_DOMAIN
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: TEST_DOMAIN
+          - name: TEST_URL
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: TEST_URL
+          - name: TEST_MD5
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: TEST_MD5
+          - name: CUCKOO_URL
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: CUCKOO_URL
+          - name: MISP_URL
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: MISP_URL
+          - name: FIRST_MISP_URL
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: FIRST_MISP_URL
+          - name: VT_NOTIFY_URL
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: VT_NOTIFY_URL
+          - name: DEBUG
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DEBUG
+          - name: DISABLE_LOGGING_TEST
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DISABLE_LOGGING_TEST
+          - name: MOCK_CONNECTIONS
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: MOCK_CONNECTIONS
+          - name: CELERY_BROKER_URL
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: CELERY_BROKER_URL
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DB_NAME
+          - name: HTTPS_ENABLED
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: HTTPS_ENABLED
+          - name: AWS_SECRETS
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: AWS_SECRETS
+          - name: AWS_SQS
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: AWS_SQS
+          - name: AWS_REGION
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: AWS_REGION #
+
+        - name: threatmatrix-celery-beat
+          image: <docker-repo>/celery-beat:latest
+          volumeMounts:
+            - name: shared-files
+              mountPath: /opt/deploy/files_required
+          env:
+          - name: DJANGO_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DJANGO_SECRET
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DB_HOST
+          - name: DB_PORT
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DB_PORT
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DB_USER
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DB_PASSWORD
+          - name: OLD_JOBS_RETENTION_DAYS
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: OLD_JOBS_RETENTION_DAYS
+          - name: PYTHREATMATRIX_TOKEN_LIFETIME
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: PYTHREATMATRIX_TOKEN_LIFETIME
+          - name: SHODAN_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: SHODAN_KEY
+          - name: ABUSEIPDB_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: ABUSEIPDB_KEY
+          - name: AUTH0_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: AUTH0_KEY
+          - name: SECURITYTRAILS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: SECURITYTRAILS_KEY
+          - name: GSF_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: GSF_KEY
+          - name: OTX_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: OTX_KEY
+          - name: CIRCL_CREDENTIALS
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: CIRCL_CREDENTIALS
+          - name: VT_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: VT_KEY
+          - name: HA_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: HA_KEY
+          - name: INTEZER_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: INTEZER_KEY
+          - name: FIRST_MISP_API
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: FIRST_MISP_API
+          - name: MISP_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: MISP_KEY
+          - name: MAXMIND_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: MAXMIND_KEY
+          - name: DNSDB_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DNSDB_KEY
+          - name: HONEYDB_API_ID
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: HONEYDB_API_ID
+          - name: HONEYDB_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: HONEYDB_API_KEY
+          - name: HUNTER_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: HUNTER_API_KEY
+          - name: CENSYS_API_ID
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: CENSYS_API_ID
+          - name: CENSYS_API_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: CENSYS_API_SECRET
+          - name: ONYPHE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: ONYPHE_KEY
+          - name: GREYNOISE_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: GREYNOISE_API_KEY
+          - name: TEST_JOB_ID
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: TEST_JOB_ID
+          - name: TEST_IP
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: TEST_IP
+          - name: TEST_DOMAIN
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: TEST_DOMAIN
+          - name: TEST_URL
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: TEST_URL
+          - name: TEST_MD5
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: TEST_MD5
+          - name: CUCKOO_URL
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: CUCKOO_URL
+          - name: MISP_URL
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: MISP_URL
+          - name: FIRST_MISP_URL
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: FIRST_MISP_URL
+          - name: VT_NOTIFY_URL
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: VT_NOTIFY_URL
+          - name: DEBUG
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DEBUG
+          - name: DISABLE_LOGGING_TEST
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DISABLE_LOGGING_TEST
+          - name: MOCK_CONNECTIONS
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: MOCK_CONNECTIONS
+          - name: CELERY_BROKER_URL
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: CELERY_BROKER_URL
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DB_NAME
+          - name: HTTPS_ENABLED
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: HTTPS_ENABLED
+          - name: AWS_SECRETS
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: AWS_SECRETS
+          - name: AWS_SQS
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: AWS_SQS
+          - name: AWS_REGION
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: AWS_REGION
+        
+        - name: threatmatrix-celery-worker
+          image: <docker-repo>/celery-worker:latest
+          volumeMounts:
+            - name: shared-files
+              mountPath: /opt/deploy/files_required
+          env:
+          - name: DJANGO_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DJANGO_SECRET
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DB_HOST
+          - name: DB_PORT
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DB_PORT
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DB_USER
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DB_PASSWORD
+          - name: OLD_JOBS_RETENTION_DAYS
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: OLD_JOBS_RETENTION_DAYS
+          - name: PYTHREATMATRIX_TOKEN_LIFETIME
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: PYTHREATMATRIX_TOKEN_LIFETIME
+          - name: SHODAN_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: SHODAN_KEY
+          - name: ABUSEIPDB_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: ABUSEIPDB_KEY
+          - name: AUTH0_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: AUTH0_KEY
+          - name: SECURITYTRAILS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: SECURITYTRAILS_KEY
+          - name: GSF_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: GSF_KEY
+          - name: OTX_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: OTX_KEY
+          - name: CIRCL_CREDENTIALS
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: CIRCL_CREDENTIALS
+          - name: VT_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: VT_KEY
+          - name: HA_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: HA_KEY
+          - name: INTEZER_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: INTEZER_KEY
+          - name: FIRST_MISP_API
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: FIRST_MISP_API
+          - name: MISP_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: MISP_KEY
+          - name: MAXMIND_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: MAXMIND_KEY
+          - name: DNSDB_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DNSDB_KEY
+          - name: HONEYDB_API_ID
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: HONEYDB_API_ID
+          - name: HONEYDB_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: HONEYDB_API_KEY
+          - name: HUNTER_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: HUNTER_API_KEY
+          - name: CENSYS_API_ID
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: CENSYS_API_ID
+          - name: CENSYS_API_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: CENSYS_API_SECRET
+          - name: ONYPHE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: ONYPHE_KEY
+          - name: GREYNOISE_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: GREYNOISE_API_KEY
+          - name: TEST_JOB_ID
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: TEST_JOB_ID
+          - name: TEST_IP
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: TEST_IP
+          - name: TEST_DOMAIN
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: TEST_DOMAIN
+          - name: TEST_URL
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: TEST_URL
+          - name: TEST_MD5
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: TEST_MD5
+          - name: CUCKOO_URL
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: CUCKOO_URL
+          - name: MISP_URL
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: MISP_URL
+          - name: FIRST_MISP_URL
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: FIRST_MISP_URL
+          - name: VT_NOTIFY_URL
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: VT_NOTIFY_URL
+          - name: DEBUG
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DEBUG
+          - name: DISABLE_LOGGING_TEST
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DISABLE_LOGGING_TEST
+          - name: MOCK_CONNECTIONS
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: MOCK_CONNECTIONS
+          - name: CELERY_BROKER_URL
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: CELERY_BROKER_URL
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: DB_NAME
+          - name: HTTPS_ENABLED
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: HTTPS_ENABLED
+          - name: AWS_SECRETS
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: AWS_SECRETS
+          - name: AWS_SQS
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: AWS_SQS
+          - name: AWS_REGION
+            valueFrom:
+              secretKeyRef:
+                name: <PLACE_SECRETS>
+                key: AWS_REGION
