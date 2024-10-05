@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: daemon-backend-rabbitmq
+  labels:
+    app: backend-rabbitmq
+spec:
+  selector:
+    matchLabels:
+      app: backend-rabbitmq
+  template:
+    metadata:
+      labels:
+        app: backend-rabbitmq
+    spec:
+      containers:
+        - name: backend-rabbitmq
+          image: <docker-repo>/rabbitmq:latest
+          ports:
+            - containerPort: 5672
