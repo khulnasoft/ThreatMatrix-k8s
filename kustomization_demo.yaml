@@ -1,0 +1,57 @@
+secretGenerator:
+- name: env-app-secrets
+  literals:
+  # Required Secrets
+  - DJANGO_SECRET=<DJANGO_SECRET>
+  - DB_HOST=<DB_HOST>
+  - DB_PORT=<DB_PORT>
+  - DB_USER=thmatrix
+  - DB_PASSWORD=thmatrix
+  # Additional Config variables
+  # jobs older than this would be flushed from the database periodically. Default: 3 days
+  - OLD_JOBS_RETENTION_DAYS=3
+  # ThreatMatrix's API token will expire if unused for how many days ? Default: 7 days
+  - PYTHREATMATRIX_TOKEN_LIFETIME=7
+  # Optional API keys
+  - SHODAN_KEY=
+  - ABUSEIPDB_KEY=
+  - AUTH0_KEY=
+  - SECURITYTRAILS_KEY=
+  - GSF_KEY=
+  - OTX_KEY=
+  - CIRCL_CREDENTIALS=user|pass
+  - VT_KEY=
+  - HA_KEY=
+  - INTEZER_KEY=
+  - FIRST_MISP_API=
+  - MISP_KEY=
+  - MAXMIND_KEY=
+  - DNSDB_KEY=
+  - HONEYDB_API_ID=
+  - HONEYDB_API_KEY=
+  - HUNTER_API_KEY=
+  - CENSYS_API_ID=
+  - CENSYS_API_SECRET=
+  - ONYPHE_KEY=
+  - GREYNOISE_API_KEY=
+  # Test tokens
+  - TEST_JOB_ID=1
+  - TEST_IP=8.8.8.8
+  - TEST_DOMAIN=www.google.com
+  - TEST_URL=https://www.google.com/search?test
+  - TEST_MD5=446c5fbb11b9ce058450555c1c27153c
+  # URLs
+  - CUCKOO_URL=
+  - MISP_URL=
+  - FIRST_MISP_URL=
+  - VT_NOTIFY_URL=
+  # other variables
+  - DEBUG=False
+  - DISABLE_LOGGING_TEST=False
+  - MOCK_CONNECTIONS=False
+  - CELERY_BROKER_URL=amqp://guest:guest@backend-rabbitmq.default.svc.cluster.local:5672
+  - DB_NAME=intel_owl_db
+  - HTTPS_ENABLED=not_enabled
+  - AWS_SECRETS=False
+  - AWS_SQS=False
+  - AWS_REGION=eu-central-1
