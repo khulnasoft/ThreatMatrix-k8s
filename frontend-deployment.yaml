@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-frontend-nginx
+  labels:
+    app: frontend-nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend-nginx
+  template:
+    metadata:
+      labels:
+        app: frontend-nginx
+    spec:
+      containers:
+        - name: frontend-nginx
+          image: <docker-repo>/nginx-rp:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-logs
+              mountPath: /var/log/nginx
+            - name: static
+              mountPath: /var/www/static
+      volumes:
+        - name: nginx-logs
+          emptyDir: {}
+        - name: static
+          persistentVolumeClaim:
+            claimName: static-claim
