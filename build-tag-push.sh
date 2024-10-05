@@ -3,7 +3,7 @@ set -e;
 echo "###############"
 echo "Fetching Latest files from ThreatMatrix"
 echo "###############"
-cp ThreatMatrix/docker/entrypoint_uwsgi.sh .
+cp ThreatMatrix/docker/entrypoints/uwsgi.sh .
 cp ThreatMatrix/configuration/threat_matrix.ini .
 cp ThreatMatrix/docker/Dockerfile .
 cp ThreatMatrix/docker/Dockerfile_nginx ./dockerfile-nginx
