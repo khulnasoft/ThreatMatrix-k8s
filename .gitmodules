@@ -1,0 +1,3 @@
+[submodule "ThreatMatrix"]
+	path = ThreatMatrix
+	url = https://github.com/khulnasoft/ThreatMatrix.git
