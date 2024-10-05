@@ -1,0 +1,32 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: static-volume  #Volume to share nginx-static files between pods
+spec:
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - <node> # Will be replaced by node from the cluster after running deploy.sh while deploying.
+  accessModes:
+    - ReadWriteMany
+  storageClassName: static
+  capacity:
+    storage: 1Gi
+  local:
+    path: /tmp
+---
+kind: PersistentVolumeClaim #PVC to be claimed by the pods
+apiVersion: v1
+metadata:
+  name: static-claim
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: static
+  resources:
+    requests:
+      storage: 1Gi
